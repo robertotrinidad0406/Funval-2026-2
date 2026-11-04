@@ -27,15 +27,114 @@
     "/api/menu": {
       "get": {
         "tags": [
-          "Menu"
+          "Products"
         ],
+        "summary": "Lista todos los productos",
         "description": "",
         "responses": {
           "200": {
             "description": "OK"
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Error al consultar los productos"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Crea un producto",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "price": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Producto creado"
+          },
+          "400": {
+            "description": "El cuerpo no es válido"
+          },
+          "500": {
+            "description": "Error al crear el producto"
+          }
+        }
+      }
+    },
+    "/api/menu/{id}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Obtiene un producto por su id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Producto encontrado"
+          },
+          "400": {
+            "description": "El id no es válido"
+          },
+          "404": {
+            "description": "Producto no encontrado"
+          },
+          "500": {
+            "description": "Error al consultar el producto"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Actualiza un producto",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Producto actualizado"
+          },
+          "400": {
+            "description": "El id o el cuerpo no son válidos"
+          },
+          "404": {
+            "description": "Producto no encontrado"
+          },
+          "500": {
+            "description": "Error al actualizar el producto"
           }
         }
       }
