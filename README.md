@@ -66,6 +66,9 @@ app.get("/usuarios", (req, res) => {
 
 - `src/index.ts`: Archivo principal y punto de entrada donde se levanta el servidor Express.
 - `src/config/db.ts`: Pool de conexiones de PostgreSQL.
+- `src/models/product.model.ts`: Consultas a PostgreSQL para los productos.
+- `src/controllers/product.controller.ts`: Lógica de las peticiones de productos.
+- `src/routes/product.routes.ts`: Rutas CRUD de productos.
 - `src/libs/swagger.lib.ts`: Configuración para la generación automática de Swagger.
 - `src/routes/swagger.router.ts`: Archivo que expone la ruta `/api/docs` usando `swagger-ui-express`.
 - `swagger-output.json`: Archivo autogenerado con la especificación de tu proyecto **(No editar manualmente)**.
