@@ -25,10 +25,16 @@ La forma más fácil de empezar es usando GitHub:
    ```
 
 2. Configura las variables de entorno:
-   Crea un archivo `.env` en la raíz del proyecto. Puedes definir el puerto de tu servidor ahí:
+   Copia `env.example` como `.env` en la raíz del proyecto y configura las credenciales de tu PostgreSQL local:
    ```env
    PORT=3000
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_NAME=rincon_del_sabor_db
+   DB_USER=postgres
+   DB_PASSWORD=tu_contraseña_aqui
    ```
+   Reemplaza `tu_contraseña_aqui` por tu contraseña real. `.env` está excluido de Git; no publiques tus credenciales.
 
 ## 🏃‍♂️ Ejecución
 
@@ -45,6 +51,8 @@ Una vez que el servidor esté en funcionamiento, puedes ver y probar los endpoin
 
 👉 **http://localhost:3000/api/docs** *(Ajusta el puerto si configuraste uno diferente en tu archivo `.env`)*
 
+`GET /api/menu` consulta los productos de la tabla `products` en PostgreSQL.
+
 Para documentar tus propias rutas, la librería `swagger-autogen` leerá tus endpoints automáticamente. Puedes mejorar la documentación agregando comentarios especiales dentro de tus rutas. Por ejemplo:
 ```typescript
 app.get("/usuarios", (req, res) => {
@@ -57,6 +65,7 @@ app.get("/usuarios", (req, res) => {
 ## 📂 Estructura del Proyecto
 
 - `src/index.ts`: Archivo principal y punto de entrada donde se levanta el servidor Express.
+- `src/config/db.ts`: Pool de conexiones de PostgreSQL.
 - `src/libs/swagger.lib.ts`: Configuración para la generación automática de Swagger.
 - `src/routes/swagger.router.ts`: Archivo que expone la ruta `/api/docs` usando `swagger-ui-express`.
 - `swagger-output.json`: Archivo autogenerado con la especificación de tu proyecto **(No editar manualmente)**.
