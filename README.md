@@ -52,6 +52,13 @@ Una vez que el servidor esté en funcionamiento, puedes ver y probar los endpoin
 👉 **http://localhost:3000/api/docs** *(Ajusta el puerto si configuraste uno diferente en tu archivo `.env`)*
 
 `GET /api/menu` consulta los productos de la tabla `products` en PostgreSQL.
+El cuerpo de `POST /api/menu` también se valida con Zod antes de insertar.
+
+La API de clientes usa la tabla `customers`, con un `id` autogenerado y las
+columnas `first_name`, `last_name`, `email`, `phone` y `address`. Ofrece
+`GET /api/customers`, `GET /api/customers/:id`, `POST /api/customers` y
+`PUT /api/customers/:id`. Los cuerpos de POST y PUT se validan con Zod antes
+de consultar la base de datos.
 
 Para documentar tus propias rutas, la librería `swagger-autogen` leerá tus endpoints automáticamente. Puedes mejorar la documentación agregando comentarios especiales dentro de tus rutas. Por ejemplo:
 ```typescript
@@ -69,6 +76,8 @@ app.get("/usuarios", (req, res) => {
 - `src/models/product.model.ts`: Consultas a PostgreSQL para los productos.
 - `src/controllers/product.controller.ts`: Lógica de las peticiones de productos.
 - `src/routes/product.routes.ts`: Rutas CRUD de productos.
+- `src/models/customer.model.ts`, `src/controllers/customer.controller.ts` y `src/routes/customer.routes.ts`: CRUD de clientes.
+- `src/libs/validate-customer.ts`: Validación Zod para los cuerpos de clientes.
 - `src/libs/swagger.lib.ts`: Configuración para la generación automática de Swagger.
 - `src/routes/swagger.router.ts`: Archivo que expone la ruta `/api/docs` usando `swagger-ui-express`.
 - `swagger-output.json`: Archivo autogenerado con la especificación de tu proyecto **(No editar manualmente)**.

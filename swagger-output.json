@@ -138,6 +138,163 @@
           }
         }
       }
+    },
+    "/api/customers": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Lista todos los clientes",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Error al consultar los clientes"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Crea un cliente",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "first_name": {
+                  "type": "string",
+                  "example": "Ana"
+                },
+                "last_name": {
+                  "type": "string",
+                  "example": "Lopez"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "ana@example.com"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "555-1234"
+                },
+                "address": {
+                  "type": "string",
+                  "example": "Calle 1"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Cliente creado"
+          },
+          "400": {
+            "description": "El cuerpo no es válido"
+          },
+          "500": {
+            "description": "Error al crear el cliente"
+          }
+        }
+      }
+    },
+    "/api/customers/{id}": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Obtiene un cliente por su id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente encontrado"
+          },
+          "400": {
+            "description": "El id no es válido"
+          },
+          "404": {
+            "description": "Cliente no encontrado"
+          },
+          "500": {
+            "description": "Error al consultar el cliente"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Actualiza un cliente",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "first_name": {
+                  "type": "string",
+                  "example": "Ana"
+                },
+                "last_name": {
+                  "type": "string",
+                  "example": "Lopez"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "ana@example.com"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "555-1234"
+                },
+                "address": {
+                  "type": "string",
+                  "example": "Calle 1"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente actualizado"
+          },
+          "400": {
+            "description": "El id o el cuerpo no son válidos"
+          },
+          "404": {
+            "description": "Cliente no encontrado"
+          },
+          "500": {
+            "description": "Error al actualizar el cliente"
+          }
+        }
+      }
     }
   }
 }

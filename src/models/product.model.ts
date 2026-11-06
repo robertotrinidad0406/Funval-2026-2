@@ -1,23 +1,19 @@
 import pool from "../config/db.js";
-
 export interface Product {
     id: number;
     name: string;
     description: string | null;
     price: string;
 }
-
 export interface ProductInput {
     name: string;
     description: string | null;
     price: number;
 }
-
 export async function getAllProducts(): Promise<Product[]> {
     const result = await pool.query<Product>("SELECT * FROM products");
     return result.rows;
 }
-
 export async function getProductById(id: number): Promise<Product | null> {
     const result = await pool.query<Product>(
         "SELECT * FROM products WHERE id = $1",
@@ -25,7 +21,6 @@ export async function getProductById(id: number): Promise<Product | null> {
     );
     return result.rows[0] ?? null;
 }
-
 export async function insertProduct(
     name: string,
     description: string | null,
@@ -37,7 +32,6 @@ export async function insertProduct(
     );
     return result.rows[0]!;
 }
-
 export async function updateProduct(
     id: number,
     name: string,
