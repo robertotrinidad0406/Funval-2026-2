@@ -5,6 +5,7 @@ import {
     getProduct,
     updateProductController,
 } from "../controllers/product.controller.js";
+import { validateProduct } from "../middlewares/validate-product.js";
 
 const productRouter: Router = Router();
 
@@ -32,6 +33,7 @@ productRouter.post(
        #swagger.responses[400] = { description: 'El cuerpo no es válido' }
        #swagger.responses[201] = { description: 'Producto creado' }
        #swagger.responses[500] = { description: 'Error al crear el producto' } */
+    validateProduct,
     createProduct,
 );
 productRouter.put(
