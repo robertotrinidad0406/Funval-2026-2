@@ -12,7 +12,10 @@ const productRouter: Router = Router();
 productRouter.get(
     "/menu",
     /* #swagger.tags = ['Products']
-       #swagger.summary = 'Lista todos los productos'
+       #swagger.summary = 'Lista productos con filtro y paginación'
+       #swagger.parameters['maxPrice'] = { in: 'query', type: 'number', required: false }
+       #swagger.parameters['page'] = { in: 'query', type: 'integer', required: false }
+       #swagger.parameters['limit'] = { in: 'query', type: 'integer', required: false }
        #swagger.responses[500] = { description: 'Error al consultar los productos' } */
     getMenu,
 );
@@ -28,6 +31,7 @@ productRouter.get(
 );
 productRouter.post(
     "/menu",
+    validateProduct,
     /* #swagger.tags = ['Products']
        #swagger.summary = 'Crea un producto'
        #swagger.responses[400] = { description: 'El cuerpo no es válido' }
@@ -38,6 +42,7 @@ productRouter.post(
 );
 productRouter.put(
     "/menu/:id",
+    validateProduct,
     /* #swagger.tags = ['Products']
        #swagger.summary = 'Actualiza un producto'
        #swagger.responses[200] = { description: 'Producto actualizado' }

@@ -13,8 +13,24 @@ export interface ProductInput {
     price: number;
 }
 
-export async function getAllProducts(): Promise<Product[]> {
-    const result = await pool.query<Product>("SELECT * FROM products");
+export async function getAllProducts(
+    maxPrice?: number,
+    page = 1,
+    limit = 10,
+): Promise<Product[]> {
+    const values: number[] = [];
+    let query = "SELECT * FROM products";
+
+    if (maxPrice !== undefined) {
+        values.push(maxPrice);
+        query += ` WHERE price <= $${values.length}`;
+    }
+
+    const offset = (page - 1) * limit;
+    values.push(limit, offset);
+    query += ` ORDER BY name LIMIT $${values.length - 1} OFFSET $${values.length}`;
+
+    const result = await pool.query<Product>(query, values);
     return result.rows;
 }
 

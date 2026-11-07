@@ -51,7 +51,13 @@ Una vez que el servidor esté en funcionamiento, puedes ver y probar los endpoin
 
 👉 **http://localhost:3000/api/docs** *(Ajusta el puerto si configuraste uno diferente en tu archivo `.env`)*
 
-`GET /api/menu` consulta los productos de la tabla `products` en PostgreSQL.
+### Endpoints principales
+
+- `GET /api/menu?maxPrice=50&page=1&limit=10`: filtra productos por precio y pagina los resultados. `page` y `limit` son enteros positivos; por defecto se usan `1` y `10`.
+- `GET/POST/PUT/DELETE /api/customers`: CRUD de clientes. El cuerpo usa `first_name`, `last_name`, `email`, `phone` y `address`.
+- `GET /api/sales`, `GET /api/sales/:id` y `POST /api/sales`: consulta ventas con el nombre del cliente y registra una venta. El cuerpo de creación usa `customer_id`, `product_id`, `quantity` y `total`.
+
+Las rutas de productos siguen disponibles bajo `/api/menu`.
 
 Para documentar tus propias rutas, la librería `swagger-autogen` leerá tus endpoints automáticamente. Puedes mejorar la documentación agregando comentarios especiales dentro de tus rutas. Por ejemplo:
 ```typescript
@@ -69,6 +75,9 @@ app.get("/usuarios", (req, res) => {
 - `src/models/product.model.ts`: Consultas a PostgreSQL para los productos.
 - `src/controllers/product.controller.ts`: Lógica de las peticiones de productos.
 - `src/routes/product.routes.ts`: Rutas CRUD de productos.
+- `src/models/customer.model.ts`, `src/controllers/customer.controller.ts` y `src/routes/customer.routes.ts`: CRUD de clientes.
+- `src/models/sale.model.ts`, `src/controllers/sale.controller.ts` y `src/routes/sale.routes.ts`: consultas y creación de ventas.
+- `src/middlewares/`: validación de cuerpos de productos, clientes y ventas con Zod.
 - `src/libs/swagger.lib.ts`: Configuración para la generación automática de Swagger.
 - `src/routes/swagger.router.ts`: Archivo que expone la ruta `/api/docs` usando `swagger-ui-express`.
 - `swagger-output.json`: Archivo autogenerado con la especificación de tu proyecto **(No editar manualmente)**.

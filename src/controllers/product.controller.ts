@@ -12,26 +12,60 @@ function parseProductId(value: string): number | null {
     return Number.isSafeInteger(id) && id > 0 ? id : null;
 }
 
-function isProductInput(body: unknown): body is ProductInput {
-    if (typeof body !== "object" || body === null || Array.isArray(body)) {
-        return false;
+function parseQueryNumber(value: unknown): number | null {
+    if (typeof value !== "string" || value.trim() === "") {
+        return null;
     }
 
-    const input = body as Record<string, unknown>;
-    return (
-        typeof input.name === "string" &&
-        input.name.trim().length > 0 &&
-        (typeof input.description === "string" || input.description === null) &&
-        typeof input.price === "number" &&
-        Number.isFinite(input.price)
-    );
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
 }
 
-export async function getMenu(_req: Request, res: Response): Promise<void> {
+function parsePositiveInteger(value: unknown): number | null {
+    const parsed = parseQueryNumber(value);
+    return parsed !== null && Number.isSafeInteger(parsed) && parsed > 0
+        ? parsed
+        : null;
+}
+
+export async function getMenu(req: Request, res: Response): Promise<void> {
     /*#swagger.tags = ['Products']
-      #swagger.summary = 'Lista todos los productos' */
+      #swagger.summary = 'Lista productos con filtro y paginación'
+      #swagger.parameters['maxPrice'] = { in: 'query', type: 'number', required: false }
+      #swagger.parameters['page'] = { in: 'query', type: 'integer', required: false }
+      #swagger.parameters['limit'] = { in: 'query', type: 'integer', required: false } */
+    let maxPrice: number | undefined;
+    if (req.query.maxPrice !== undefined) {
+        const parsedMaxPrice = parseQueryNumber(req.query.maxPrice);
+        if (parsedMaxPrice === null || parsedMaxPrice < 0) {
+            res.status(400).json({
+                error: "maxPrice debe ser un número no negativo",
+            });
+            return;
+        }
+        maxPrice = parsedMaxPrice;
+    }
+
+    const page =
+        req.query.page === undefined ? 1 : parsePositiveInteger(req.query.page);
+    const limit =
+        req.query.limit === undefined
+            ? 10
+            : parsePositiveInteger(req.query.limit);
+
+    if (
+        page === null ||
+        limit === null ||
+        !Number.isSafeInteger((page - 1) * limit)
+    ) {
+        res.status(400).json({
+            error: "page y limit deben ser enteros positivos con un offset válido",
+        });
+        return;
+    }
+
     try {
-        const products = await getAllProducts();
+        const products = await getAllProducts(maxPrice, page, limit);
         res.json(products);
     } catch (error) {
         console.error("Error al consultar los productos:", error);
@@ -65,18 +99,11 @@ export async function getProduct(
 }
 
 export async function createProduct(
-    req: Request,
+    req: Request<Record<string, never>, unknown, ProductInput>,
     res: Response,
 ): Promise<void> {
     /*#swagger.tags = ['Products']
       #swagger.summary = 'Crea un producto' */
-    if (!isProductInput(req.body)) {
-        res.status(400).json({
-            error: "Se requieren name, description, y un price numérico",
-        });
-        return;
-    }
-
     try {
         const product = await insertProduct(
             req.body.name,
@@ -91,7 +118,7 @@ export async function createProduct(
 }
 
 export async function updateProductController(
-    req: Request<{ id: string }>,
+    req: Request<{ id: string }, unknown, ProductInput>,
     res: Response,
 ): Promise<void> {
     /*#swagger.tags = ['Products']
@@ -101,13 +128,6 @@ export async function updateProductController(
         res.status(400).json({ error: "El id debe ser un entero positivo" });
         return;
     }
-    if (!isProductInput(req.body)) {
-        res.status(400).json({
-            error: "Se requieren name, description, y un price numérico",
-        });
-        return;
-    }
-
     try {
         const product = await updateProduct(
             id,

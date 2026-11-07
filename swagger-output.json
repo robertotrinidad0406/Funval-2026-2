@@ -29,11 +29,34 @@
         "tags": [
           "Products"
         ],
-        "summary": "Lista todos los productos",
+        "summary": "Lista productos con filtro y paginación",
         "description": "",
+        "parameters": [
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "type": "number",
+            "required": false
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "type": "integer",
+            "required": false
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "500": {
             "description": "Error al consultar los productos"
@@ -135,6 +158,270 @@
           },
           "500": {
             "description": "Error al actualizar el producto"
+          }
+        }
+      }
+    },
+    "/api/customers/": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Lista todos los clientes",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Lista de clientes"
+          },
+          "500": {
+            "description": "Error al consultar los clientes"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Crea un cliente",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "first_name": {
+                  "type": "string",
+                  "example": "Ana"
+                },
+                "last_name": {
+                  "type": "string",
+                  "example": "Pérez"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "ana@example.com"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "555-0101"
+                },
+                "address": {
+                  "type": "string",
+                  "example": "Calle 1"
+                }
+              },
+              "required": [
+                "first_name",
+                "last_name",
+                "email",
+                "phone",
+                "address"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Cliente creado"
+          },
+          "400": {
+            "description": "El cuerpo no es válido"
+          }
+        }
+      }
+    },
+    "/api/customers/{id}": {
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Obtiene un cliente por su id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Cliente no encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Actualiza un cliente",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "first_name": {
+                  "type": "string",
+                  "example": "Ana"
+                },
+                "last_name": {
+                  "type": "string",
+                  "example": "Pérez"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "ana@example.com"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "555-0101"
+                },
+                "address": {
+                  "type": "string",
+                  "example": "Calle 1"
+                }
+              },
+              "required": [
+                "first_name",
+                "last_name",
+                "email",
+                "phone",
+                "address"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Cliente no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Elimina un cliente",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Cliente eliminado"
+          },
+          "404": {
+            "description": "Cliente no encontrado"
+          }
+        }
+      }
+    },
+    "/api/sales/": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Lista todas las ventas con el nombre del cliente",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Crea una venta",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "customer_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "product_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "quantity": {
+                  "type": "number",
+                  "example": 2
+                },
+                "total": {
+                  "type": "number",
+                  "example": 25.5
+                }
+              },
+              "required": [
+                "customer_id",
+                "product_id",
+                "quantity",
+                "total"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Venta creada"
+          },
+          "400": {
+            "description": "El cuerpo no es válido"
+          }
+        }
+      }
+    },
+    "/api/sales/{id}": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "summary": "Obtiene una venta por id con el nombre del cliente",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Venta no encontrada"
           }
         }
       }
